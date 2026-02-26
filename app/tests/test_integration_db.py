@@ -12,7 +12,7 @@ pytestmark = pytest.mark.integration
 @pytest.fixture(scope="session", autouse=True)
 def ensure_test_db():
     # bezpieczeństwo: integracyjne testy tylko gdy TEST_DATABASE_URL jest ustawione
-    assert os.getenv("TEST_DATABASE_URL"), "Brak TEST_DATABASE_URL - nie uruchamiam testów integracyjnych"
+    assert os.getenv("DATABASE_URL"), "Brak DATABASE_URL – nie uruchamiam testów integracyjnych"
     Base.metadata.create_all(bind=engine)
     yield
     # opcjonalnie: nie usuwamy tabel, bo to testowa baza w dockerze

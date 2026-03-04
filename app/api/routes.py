@@ -32,15 +32,16 @@ def to_response(r) -> ReservationResponse:
     )
 
 
-@router.post("/reservations", response_model=ReservationResponse)
+@router.post("/reservations", response_model=ReservationResponse) #1 endpoint API 
 async def create_reservation(req: CreateReservationRequest, db: Session = Depends(get_db)):
     user = UserRepository(db).get_or_create_by_email(req.user_email)
     room = RoomRepository(db).get_or_create_by_name(req.room_name)
+   
 
     service = ReservationService(
         db=db,
         reservation_repo=ReservationRepository(db),
-        holiday_client=HolidayApiClient(settings.holiday_api_base_url),
+        holiday_client=HolidayApiClient(settings.holiday_api_base_url),#tworzy obiekt ktory umozliwi nam dostep do zewnetrznego API 
     )
 
     try:

@@ -34,7 +34,7 @@ class ReservationService:
     ):
         self.db = db
         self.reservation_repo = reservation_repo
-        self.holiday_client = holiday_client
+        self.holiday_client = holiday_client #przekazanie obiektu API
         self.policy = policy or ReservationPolicy()
         self.now_fn = now_fn
 
@@ -88,6 +88,6 @@ class ReservationService:
             raise TooLateToCancelException("too late to cancel")
 
         r.status = ReservationStatus.CANCELLED
-        self.db.commit()
+        self.db.commit()#zatwierdza
         self.db.refresh(r)
         return r

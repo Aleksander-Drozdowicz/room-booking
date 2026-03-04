@@ -11,6 +11,6 @@ class UserRepository:
         if user:
             return user
         user = User(email=email)
-        self.db.add(user)
-        self.db.flush()
+        self.db.add(user)   #dodaje
+        self.db.flush()#wysyla dane do bazy bez zatwierdzenia,(services zatwierdza)(Repozytorium nie powinno samo decydować o commit)
         return user

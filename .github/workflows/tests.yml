@@ -6,25 +6,25 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest #GitHub uruchamia wirtualną maszynę Linux (Ubuntu).
 
     services:
       postgres:
-        image: postgres:16
+        image: postgres:16 #uruchamia kontener docker z postresql
         env:
           POSTGRES_USER: booking
           POSTGRES_PASSWORD: booking
-          POSTGRES_DB: booking_test
+          POSTGRES_DB: booking_test #tworzy baze
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U booking -d booking_test"
+        options: >- #sprawdza czy baza gotow zanim odpali testy 
+          --health-cmd="pg_isready -U booking -d booking_test"  
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4 #GitHub pobiera Twój kod z repozytorium.
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -42,7 +42,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client
 
-      - name: Wait for Postgres
+      - name: Wait for Postgres #laczy sie z baza max 30x po 2 s
         run: |
           for i in {1..30}; do
             pg_isready -h localhost -p 5432 -U booking -d booking_test && exit 0

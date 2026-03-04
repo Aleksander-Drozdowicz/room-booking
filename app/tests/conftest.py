@@ -16,13 +16,13 @@ TEST_DB_URL = os.getenv(
 
 @pytest.fixture(scope="session")
 def engine():
-    engine = create_engine(TEST_DB_URL, pool_pre_ping=True)
+    engine = create_engine(TEST_DB_URL, pool_pre_ping=True) #tworzy polaczenie z testowa db i tabele 
     Base.metadata.create_all(engine)
     yield engine
-    Base.metadata.drop_all(engine)
+    Base.metadata.drop_all(engine) #usuwa tabele po zakonczeniu testow
 
 
-@pytest.fixture()
+@pytest.fixture() # Daje testowi dostęp do bazy i automatycznie sprzata po nim 
 def db_session(engine):
     TestingSessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
     db = TestingSessionLocal()
@@ -37,7 +37,7 @@ def client(db_session):
     def override_get_db():
         yield db_session
 
-    app.dependency_overrides[get_db] = override_get_db
-    with TestClient(app) as c:
+    app.dependency_overrides[get_db] = override_get_db #Zamiast prawdziwego get_db, użyj override_get_db
+    with TestClient(app) as c: #To tworzy klienta HTTP
         yield c
-    app.dependency_overrides.clear()
+    app.dependency_overrides.clear() #Po zakończeniu testu usuwa podmianę.

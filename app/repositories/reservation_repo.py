@@ -34,11 +34,11 @@ class ReservationRepository:
 
     def has_conflict(self, room_id: int, start: datetime, end: datetime) -> bool:
         q = (
-            self.db.query(Reservation)
-            .filter(
+            self.db.query(Reservation) # tworzymy zapytanie na modelu reservation
+            .filter( #przeszukujemy DB 
                 Reservation.room_id == room_id,
                 Reservation.status == ReservationStatus.ACTIVE,
                 and_(Reservation.start < end, start < Reservation.end),
             )
         )
-        return self.db.query(q.exists()).scalar()
+        return self.db.query(q.exists()).scalar() 
